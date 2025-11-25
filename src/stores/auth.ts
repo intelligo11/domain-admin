@@ -5,7 +5,7 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref(null)
     const isAuthenticated = ref(false)
 
-    async function login(username, password) {
+    async function login(username: string, password: string) {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
             })
 
             if (res.ok) {
-                const data = await res.json()
+                const data = await res.json() as any
                 user.value = data.user
                 isAuthenticated.value = true
                 return true
@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             const res = await fetch('/api/auth/me')
             if (res.ok) {
-                const data = await res.json()
+                const data = await res.json() as any
                 if (data.authenticated) {
                     user.value = data.user
                     isAuthenticated.value = true
@@ -49,25 +49,5 @@ export const useAuthStore = defineStore('auth', () => {
         return false
     }
 
-    async function updateLocale(locale: string) {
-        try {
-            const res = await fetch('/api/auth/locale', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ locale })
-            })
-
-            if (res.ok) {
-                if (user.value) {
-                    user.value.locale = locale
-                }
-                return true
-            }
-        } catch (e) {
-            console.error(e)
-        }
-        return false
-    }
-
-    return { user, isAuthenticated, login, logout, checkAuth, updateLocale }
+    return { user, isAuthenticated, login, logout, checkAuth }
 })

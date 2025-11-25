@@ -2,15 +2,15 @@
   <div>
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
-        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ $t('notifications.title') }}</h1>
-        <p class="mt-2 text-sm text-gray-700">{{ $t('notifications.description') }}</p>
+        <h1 class="text-base font-semibold leading-6 text-gray-900">通知管理</h1>
+        <p class="mt-2 text-sm text-gray-700">配置域名到期通知和其他系统通知设置</p>
       </div>
     </div>
 
     <div class="mt-8 space-y-8">
       <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">{{ $t('notifications.telegramSettings') }}</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">Telegram 机器人通知</h3>
           
           <div class="mt-6 space-y-6">
             <div class="flex items-start">
@@ -23,13 +23,13 @@
                 />
               </div>
               <div class="ml-3 text-sm leading-6">
-                <label for="telegram-enabled" class="font-medium text-gray-900">{{ $t('notifications.telegramEnabled') }}</label>
+                <label for="telegram-enabled" class="font-medium text-gray-900">启用 Telegram 通知</label>
               </div>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
               <div>
-                <label for="telegram-bot-token" class="block text-sm font-medium leading-6 text-gray-900">{{ $t('notifications.telegramBotToken') }}</label>
+                <label for="telegram-bot-token" class="block text-sm font-medium leading-6 text-gray-900">Bot Token</label>
                 <input
                   id="telegram-bot-token"
                   v-model="settings.telegramBotToken"
@@ -40,7 +40,7 @@
               </div>
 
               <div>
-                <label for="telegram-chat-id" class="block text-sm font-medium leading-6 text-gray-900">{{ $t('notifications.telegramChatId') }}</label>
+                <label for="telegram-chat-id" class="block text-sm font-medium leading-6 text-gray-900">Chat ID</label>
                 <input
                   id="telegram-chat-id"
                   v-model="settings.telegramChatId"
@@ -56,7 +56,7 @@
 
       <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">{{ $t('notifications.feishuSettings') }}</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">飞书机器人通知</h3>
           
           <div class="mt-6 space-y-6">
             <div class="flex items-start">
@@ -69,13 +69,13 @@
                 />
               </div>
               <div class="ml-3 text-sm leading-6">
-                <label for="feishu-enabled" class="font-medium text-gray-900">{{ $t('notifications.feishuEnabled') }}</label>
+                <label for="feishu-enabled" class="font-medium text-gray-900">启用飞书通知</label>
               </div>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
               <div>
-                <label for="feishu-webhook-url" class="block text-sm font-medium leading-6 text-gray-900">{{ $t('notifications.feishuWebhookUrl') }}</label>
+                <label for="feishu-webhook-url" class="block text-sm font-medium leading-6 text-gray-900">Webhook URL</label>
                 <input
                   id="feishu-webhook-url"
                   v-model="settings.feishuWebhookUrl"
@@ -91,10 +91,10 @@
 
       <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">{{ $t('notifications.expiryNotifications') }}</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">到期提醒设置</h3>
           
           <div class="mt-6">
-            <label for="notify-days" class="block text-sm font-medium leading-6 text-gray-900">{{ $t('notifications.notifyDaysBefore') }}</label>
+            <label for="notify-days" class="block text-sm font-medium leading-6 text-gray-900">提前提醒天数</label>
             <input
               id="notify-days"
               v-model.number="settings.notifyDaysBefore"
@@ -112,16 +112,16 @@
           @click="saveSettings"
           class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          {{ $t('notifications.saveSettings') }}
+          保存设置
         </button>
         <button
           type="button"
           @click="sendTestNotification"
           class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
-          {{ $t('notifications.testNotification') }}
+          发送测试通知
         </button>
-        <span v-if="saveMessage" class="text-sm text-green-600">{{ saveMessage }}</span>
+        <span v-if="saveMessage" :class="['text-sm', saveMessageType === 'success' ? 'text-green-600' : 'text-red-600']">{{ saveMessage }}</span>
       </div>
     </div>
   </div>
@@ -129,9 +129,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 
 interface NotificationSettings {
   telegramEnabled: boolean
@@ -152,6 +149,7 @@ const settings = ref<NotificationSettings>({
 })
 
 const saveMessage = ref('')
+const saveMessageType = ref<'success' | 'error'>('success')
 
 const loadSettings = async () => {
   try {
@@ -188,13 +186,16 @@ const saveSettings = async () => {
     })
     
     if (response.ok) {
-      saveMessage.value = '✓ ' + t('notifications.settingsSaved')
+      saveMessage.value = '✓ 设置已保存'
+      saveMessageType.value = 'success'
     } else {
-      saveMessage.value = '✗ ' + t('notifications.saveFailed')
+      saveMessage.value = '✗ 保存失败'
+      saveMessageType.value = 'error'
     }
   } catch (e) {
     console.error('Failed to save settings:', e)
-    saveMessage.value = '✗ ' + t('notifications.saveFailed')
+    saveMessage.value = '✗ 保存失败'
+    saveMessageType.value = 'error'
   }
   
   setTimeout(() => {
@@ -211,13 +212,16 @@ const sendTestNotification = async () => {
     })
     
     if (response.ok) {
-      saveMessage.value = '✓ ' + t('notifications.testSent')
+      saveMessage.value = '✓ 测试通知已发送'
+      saveMessageType.value = 'success'
     } else {
       const data = await response.json()
-      saveMessage.value = '✗ ' + (data.error || 'Failed to send test notification')
+      saveMessage.value = '✗ ' + (data.error || '发送测试通知失败')
+      saveMessageType.value = 'error'
     }
   } catch (e) {
-    saveMessage.value = '✗ Failed to send test notification'
+    saveMessage.value = '✗ 发送测试通知失败'
+    saveMessageType.value = 'error'
   }
   
   setTimeout(() => {

@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 用户ID（主键，自增）
   username TEXT UNIQUE NOT NULL,  -- 用户名（唯一，不能为空）
   password_hash TEXT NOT NULL,  -- 密码哈希值（不能为空）
-  locale TEXT DEFAULT 'zh-CN',  -- 语言偏好设置（默认：中文）
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP  -- 创建时间（默认：当前时间）
 );
 

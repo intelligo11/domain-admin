@@ -13,7 +13,7 @@
 
 #### 2. 部署 Pages 项目
 
-- Fork [本仓库](https://github.com/deerwan/domain-admin-demo) 到 GitHub
+- Fork [本仓库](https://github.com/deerwan/domain-admin) 到 GitHub
 - 在 Cloudflare Dashboard 创建 Pages 项目，连接 GitHub 仓库
 - 构建设置：构建命令 `npm run build`，输出目录 `dist`
 

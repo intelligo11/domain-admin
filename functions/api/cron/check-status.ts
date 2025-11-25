@@ -141,10 +141,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         // Send offline notifications
         const sentTo = [];
         if (offlineDomains.length > 0 && (telegramEnabled || feishuEnabled)) {
-            const message = `🔔 域名离线提醒 / Domain Offline Alert\n\n` +
-                `以下域名检测到离线：\nThe following domains are offline:\n\n` +
+            const message = `🔔 域名离线提醒\n\n` +
+                `以下域名检测到离线：\n\n` +
                 offlineDomains.map(d => `• ${d}`).join('\n') +
-                `\n\n⚠️ 请检查网站服务状态！\nPlease check the website service status!`;
+                `\n\n⚠️ 请检查网站服务状态！`;
 
             if (telegramEnabled && telegramBotToken && telegramChatId) {
                 const sent = await sendTelegramNotification(telegramBotToken, telegramChatId, message);

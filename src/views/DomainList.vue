@@ -2,13 +2,13 @@
   <div>
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
-        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ $t('domains.title') }}</h1>
-        <p class="mt-2 text-sm text-gray-700">{{ $t('domains.description') }}</p>
+        <h1 class="text-base font-semibold leading-6 text-gray-900">域名管理</h1>
+        <p class="mt-2 text-sm text-gray-700">管理您的所有域名，包括注册商、到期日期和状态</p>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none space-x-3">
-        <button @click="triggerImport" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">{{ $t('common.import') }}</button>
-        <button @click="exportDomains" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">{{ $t('common.export') }}</button>
-        <button @click="openAddModal" type="button" class="rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{ $t('domains.addDomain') }}</button>
+        <button @click="triggerImport" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">导入</button>
+        <button @click="exportDomains" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">导出</button>
+        <button @click="openAddModal" type="button" class="rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">添加域名</button>
       </div>
       <input type="file" ref="fileInput" class="hidden" accept=".json" @change="handleImport" />
     </div>
@@ -19,14 +19,14 @@
           <table class="min-w-full divide-y divide-gray-300">
             <thead>
               <tr>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $t('domains.domainName') }}</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ $t('domains.registrar') }}</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ $t('domains.domainDays') }}</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ $t('domains.expiryDate') }}</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ $t('domains.status') }}</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ $t('domains.notes') }}</th>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">域名</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">注册商</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">域名天数</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">到期日期</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">状态</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">备注</th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                  <span class="sr-only">{{ $t('common.edit') }}</span>
+                  <span class="sr-only">编辑</span>
                 </th>
               </tr>
             </thead>
@@ -42,19 +42,19 @@
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm">
                   <span :class="[getDaysRemaining(domain.expiry_date) < 0 ? 'text-red-600 font-semibold' : getDaysRemaining(domain.expiry_date) <= 30 ? 'text-yellow-600 font-semibold' : 'text-gray-500']">
-                    {{ getDaysRemaining(domain.expiry_date) < 0 ? $t('domains.expired') : `${getDaysRemaining(domain.expiry_date)} ${$t('domains.days')}` }}
+                    {{ getDaysRemaining(domain.expiry_date) < 0 ? '已过期' : `${getDaysRemaining(domain.expiry_date)} 天` }}
                   </span>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ formatDate(domain.expiry_date) }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm">
                   <span :class="[domain.status === 'Active' ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-red-50 text-red-700 ring-red-600/20', 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset']">
-                    {{ domain.status === 'Active' ? $t('domains.online') : $t('domains.offline') }}
+                    {{ domain.status === 'Active' ? '在线' : '离线' }}
                   </span>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500 max-w-xs truncate" :title="domain.notes">{{ domain.notes || '-' }}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                  <button @click="openEditModal(domain)" class="text-indigo-600 hover:text-indigo-900 mr-4">{{ $t('common.edit') }}</button>
-                  <button @click="openDeleteConfirm(domain)" class="text-red-600 hover:text-red-900">{{ $t('common.delete') }}</button>
+                  <button @click="openEditModal(domain)" class="text-indigo-600 hover:text-indigo-900 mr-4">编辑</button>
+                  <button @click="openDeleteConfirm(domain)" class="text-red-600 hover:text-red-900">删除</button>
                 </td>
               </tr>
             </tbody>
@@ -76,8 +76,8 @@
       :is-open="confirmOpen"
       :title="confirmTitle"
       :message="confirmMessage"
-      :confirm-text="$t('common.confirm')"
-      :cancel-text="$t('common.cancel')"
+      confirm-text="确认"
+      cancel-text="取消"
       @confirm="handleConfirm"
       @cancel="closeConfirm"
     />
@@ -85,18 +85,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useDomainStore } from '../stores/domain'
 import { storeToRefs } from 'pinia'
 import DomainModal from '../components/DomainModal.vue'
 import NotificationDialog from '../components/NotificationDialog.vue'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 import { parseJSON, exportToJSON, getMimeType, getFileExtension } from '../utils/fileFormats'
-import { useI18n } from 'vue-i18n'
 
 const domainStore = useDomainStore()
 const { domains } = storeToRefs(domainStore)
-const { t } = useI18n()
 const modalOpen = ref(false)
 const selectedDomain = ref(null)
 const fileInput = ref(null)
@@ -189,8 +187,8 @@ const handleSave = async (domainData: any) => {
 
 const openDeleteConfirm = (domain: any) => {
   showConfirm(
-    t('domains.confirmDelete'),
-    t('domains.confirmDeleteMessage', { domain: domain.domain }),
+    '确认删除',
+    `确定要删除域名 ${domain.domain} 吗？此操作无法撤销。`,
     () => {
       domainStore.deleteDomain(domain.id)
     }
@@ -214,23 +212,23 @@ const handleImport = async (event: Event) => {
       if (data.length > 0) {
         const result = await domainStore.importDomains(data)
         if (result && result.success) {
-          let message = t('common.importedDomains', { count: result.imported })
+          let message = `已导入 ${result.imported} 个域名`
           if (result.skipped > 0) {
-            message += '\n' + t('common.skippedDuplicates', { count: result.skipped })
+            message += '\n' + `跳过 ${result.skipped} 个重复域名`
           }
           showNotification(
             'success',
-            t('common.importSuccess'),
+            '导入成功',
             message,
-            result.skipped > 0 ? t('common.skippedDuplicates', { count: result.skipped }) : undefined
+            result.skipped > 0 ? `跳过 ${result.skipped} 个重复域名` : undefined
           )
         } else {
-          showNotification('error', t('common.importError'), result?.error || t('common.error'))
+          showNotification('error', '导入失败', result?.error || '错误')
         }
       }
     } catch (err: any) {
       console.error('Import failed', err)
-      showNotification('error', t('common.importError'), t('common.parseError'), err.message)
+      showNotification('error', '导入失败', '文件解析失败', err.message)
     }
     // Reset input
     if (fileInput.value) fileInput.value.value = ''
@@ -252,10 +250,9 @@ const exportDomains = () => {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
-    showNotification('success', t('common.exportSuccess'), 'JSON')
   } catch (err: any) {
     console.error('Export failed', err)
-    showNotification('error', t('common.exportError'), t('common.error'), err.message)
+    showNotification('error', '导出失败', '错误', err.message)
   }
 }
 </script>

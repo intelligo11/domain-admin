@@ -66,14 +66,14 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
             notifyDays = settings.notify_days_before || notifyDays;
             telegramEnabled = Boolean(settings.telegram_enabled);
             feishuEnabled = Boolean(settings.feishu_enabled);
-            
+
             if (telegramEnabled && settings.telegram_bot_token && settings.telegram_chat_id) {
                 telegramBotToken = settings.telegram_bot_token;
                 telegramChatId = settings.telegram_chat_id;
             } else {
                 telegramEnabled = false;
             }
-            
+
             if (feishuEnabled && settings.feishu_webhook_url) {
                 feishuWebhookUrl = settings.feishu_webhook_url;
             } else {
@@ -83,26 +83,26 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
             telegramEnabled = !!(telegramBotToken && telegramChatId);
             feishuEnabled = !!feishuWebhookUrl;
         }
-        
+
         const { results } = await env.DB.prepare(
             `SELECT * FROM domains WHERE expiry_date < datetime('now', '+${notifyDays} days') AND expiry_date > datetime('now')`
         ).all();
 
         if (!results || results.length === 0) {
-            return new Response(JSON.stringify({ success: true, message: 'No domains expiring soon' }), { 
-                headers: { 'Content-Type': 'application/json' } 
+            return new Response(JSON.stringify({ success: true, message: 'No domains expiring soon' }), {
+                headers: { 'Content-Type': 'application/json' }
             });
         }
 
         const notifications = [];
-        let message = '🔔 域名到期提醒 / Domain Expiry Alert\n\n';
-        message += `以下域名将在 ${notifyDays} 天内到期：\nThe following domains will expire within ${notifyDays} days:\n\n`;
+        let message = '🔔 域名到期提醒\n\n';
+        message += `以下域名将在 ${notifyDays} 天内到期：\n\n`;
 
         for (const domain of results) {
             const d = domain as any;
             const expiryDate = new Date(d.expiry_date);
             const daysLeft = Math.ceil((expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-            message += `• ${d.domain} - ${daysLeft} 天 / days (${d.expiry_date})\n`;
+            message += `• ${d.domain} - ${daysLeft} 天 (${d.expiry_date})\n`;
             notifications.push(d.domain);
         }
 
@@ -118,19 +118,19 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
             if (sent) sentTo.push('Feishu');
         }
 
-        return new Response(JSON.stringify({ 
-            success: true, 
+        return new Response(JSON.stringify({
+            success: true,
             domains_count: notifications.length,
             domains: notifications,
             sent_to: sentTo
-        }), { 
-            headers: { 'Content-Type': 'application/json' } 
+        }), {
+            headers: { 'Content-Type': 'application/json' }
         });
 
     } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { 
-            status: 500, 
-            headers: { 'Content-Type': 'application/json' } 
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
         });
     }
 };

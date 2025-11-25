@@ -25,7 +25,7 @@
               <div class="mt-2">
                 <p class="text-sm text-gray-500">{{ message }}</p>
                 <div v-if="details" class="mt-3 text-left bg-gray-50 rounded-md p-3">
-                  <p class="text-xs text-gray-600 font-medium mb-1">{{ $t('common.details') }}</p>
+                  <p class="text-xs text-gray-600 font-medium mb-1">详情</p>
                   <p class="text-xs text-gray-500">{{ details }}</p>
                 </div>
               </div>
@@ -42,7 +42,7 @@
                 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600'
               ]"
             >
-              {{ $t('common.ok') }}
+              确定
             </button>
           </div>
         </div>

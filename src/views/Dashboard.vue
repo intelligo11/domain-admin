@@ -1,26 +1,26 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">{{ $t('dashboard.title') }}</h2>
+    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">仪表盘</h2>
     
     <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-        <dt class="truncate text-sm font-medium text-gray-500">{{ $t('dashboard.totalDomains') }}</dt>
+        <dt class="truncate text-sm font-medium text-gray-500">域名总数</dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ domains.length }}</dd>
       </div>
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-        <dt class="truncate text-sm font-medium text-gray-500">{{ $t('dashboard.onlineDomains') }}</dt>
+        <dt class="truncate text-sm font-medium text-gray-500">在线域名</dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-green-600">{{ onlineDomains }}</dd>
       </div>
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-        <dt class="truncate text-sm font-medium text-gray-500">{{ $t('dashboard.offlineDomains') }}</dt>
+        <dt class="truncate text-sm font-medium text-gray-500">离线域名</dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-red-600">{{ offlineDomains }}</dd>
       </div>
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-        <dt class="truncate text-sm font-medium text-gray-500">{{ $t('dashboard.expiringSoon') }}</dt>
+        <dt class="truncate text-sm font-medium text-gray-500">即将到期</dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-yellow-600">{{ expiringSoon }}</dd>
       </div>
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-        <dt class="truncate text-sm font-medium text-gray-500">{{ $t('dashboard.expiredDomains') }}</dt>
+        <dt class="truncate text-sm font-medium text-gray-500">已过期域名</dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-red-600">{{ expiredDomains }}</dd>
       </div>
     </div>

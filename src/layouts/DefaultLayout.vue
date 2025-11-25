@@ -19,7 +19,7 @@
               </TransitionChild>
               <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                 <div class="flex h-16 shrink-0 items-center">
-                  <h1 class="text-white text-xl font-bold">{{ $t('common.appName') }}</h1>
+                  <h1 class="text-white text-xl font-bold">域名管理系统</h1>
                 </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -34,15 +34,9 @@
                       </ul>
                     </li>
                     <li class="mt-auto space-y-1">
-                      <button @click="toggleLocale" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
-                        <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
-                        </svg>
-                        {{ currentLocale === 'zh-CN' ? 'English' : '中文' }}
-                      </button>
                       <a href="#" @click.prevent="logout" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
                         <ArrowLeftOnRectangleIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
-                        {{ $t('common.signOut') }}
+                        退出登录
                       </a>
                     </li>
                   </ul>
@@ -57,7 +51,7 @@
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
         <div class="flex h-16 shrink-0 items-center">
-          <h1 class="text-white text-xl font-bold">{{ $t('common.appName') }}</h1>
+          <h1 class="text-white text-xl font-bold">域名管理系统</h1>
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -72,15 +66,9 @@
               </ul>
             </li>
             <li class="mt-auto space-y-1">
-              <button @click="toggleLocale" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
-                <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
-                </svg>
-                {{ currentLocale === 'zh-CN' ? 'English' : '中文' }}
-              </button>
               <a href="#" @click.prevent="logout" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
                 <ArrowLeftOnRectangleIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
-                {{ $t('common.signOut') }}
+                退出登录
               </a>
             </li>
           </ul>
@@ -96,7 +84,7 @@
         </button>
         <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-between items-center">
           <div class="flex items-center gap-x-4 lg:gap-x-6">
-            <span class="text-sm font-semibold leading-6 text-gray-900">{{ $t('common.appName') }}</span>
+            <span class="text-sm font-semibold leading-6 text-gray-900">域名管理系统</span>
           </div>
         </div>
       </div>
@@ -111,10 +99,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { useI18n } from 'vue-i18n'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { HomeIcon, GlobeAltIcon, BellIcon, ArrowLeftOnRectangleIcon, Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -122,36 +109,15 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const sidebarOpen = ref(false)
-const { t, locale } = useI18n()
-
-const currentLocale = computed(() => locale.value)
 
 const navigation = computed(() => [
-  { name: t('nav.dashboard'), href: '/', icon: HomeIcon, current: route.name === 'dashboard' },
-  { name: t('nav.domains'), href: '/domains', icon: GlobeAltIcon, current: route.name === 'domains' },
-  { name: t('nav.notifications'), href: '/notifications', icon: BellIcon, current: route.name === 'notifications' },
+  { name: '仪表盘', href: '/', icon: HomeIcon, current: route.name === 'dashboard' },
+  { name: '域名管理', href: '/domains', icon: GlobeAltIcon, current: route.name === 'domains' },
+  { name: '通知管理', href: '/notifications', icon: BellIcon, current: route.name === 'notifications' },
 ])
-
-const toggleLocale = async () => {
-  const newLocale = locale.value === 'zh-CN' ? 'en-US' : 'zh-CN'
-  locale.value = newLocale
-  await authStore.updateLocale(newLocale)
-}
 
 const logout = async () => {
   await authStore.logout()
   router.push('/login')
 }
-
-onMounted(() => {
-  if (authStore.user?.locale) {
-    locale.value = authStore.user.locale
-  }
-})
-
-watch(() => authStore.user, (newUser) => {
-  if (newUser?.locale) {
-    locale.value = newUser.locale
-  }
-}, { immediate: true, deep: true })
 </script>

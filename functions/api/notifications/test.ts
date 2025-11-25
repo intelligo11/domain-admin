@@ -21,7 +21,7 @@ export const onRequestPost: PagesFunction = async (context) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: settings.telegramChatId,
-                        text: '🔔 测试通知 / Test Notification\n\n这是来自域名管理系统的测试消息。\nThis is a test message from Domain Admin System.',
+                        text: '🔔 测试通知\n\n这是来自域名管理系统的测试消息。',
                         parse_mode: 'HTML'
                     })
                 });
@@ -45,7 +45,7 @@ export const onRequestPost: PagesFunction = async (context) => {
                     body: JSON.stringify({
                         msg_type: 'text',
                         content: {
-                            text: '🔔 测试通知 / Test Notification\n\n这是来自域名管理系统的测试消息。\nThis is a test message from Domain Admin System.'
+                            text: '🔔 测试通知\n\n这是来自域名管理系统的测试消息。'
                         }
                     })
                 });
@@ -66,7 +66,7 @@ export const onRequestPost: PagesFunction = async (context) => {
         }
 
         if (results.length === 0) {
-            return new Response(JSON.stringify({ error: 'No notification platforms enabled' }), {
+            return new Response(JSON.stringify({ error: '未启用任何通知渠道' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
