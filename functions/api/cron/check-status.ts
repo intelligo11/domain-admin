@@ -1,5 +1,6 @@
 interface Env {
     DB: D1Database;
+    CRON_API_KEY?: string;
 }
 
 async function sendTelegramNotification(botToken: string, chatId: string, message: string): Promise<boolean> {
@@ -44,6 +45,25 @@ async function sendFeishuNotification(webhookUrl: string, message: string): Prom
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
     const { env } = context;
+
+    // 🔒 API Token 认证
+    // 支持两种方式: URL 参数 (?token=xxx) 或 Authorization Header (Bearer xxx)
+    const url = new URL(context.request.url);
+    const tokenParam = url.searchParams.get('token');
+    const authHeader = context.request.headers.get('Authorization');
+    const headerToken = authHeader?.replace('Bearer ', '');
+    const token = tokenParam || headerToken;
+
+    // 如果配置了 CRON_API_KEY,则必须验证 Token
+    if (env.CRON_API_KEY && token !== env.CRON_API_KEY) {
+        return new Response(JSON.stringify({
+            success: false,
+            error: 'Unauthorized: Invalid or missing API token'
+        }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
 
     try {
         // Get notification settings

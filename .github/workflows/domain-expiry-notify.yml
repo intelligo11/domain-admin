@@ -1,10 +1,10 @@
 name: Domain Expiry Notification
 
-# 定时任务：每天北京时间上午 9:00 执行（已禁用自动执行，可手动触发）
+# 定时任务：每天北京时间上午 9:00 执行
 on:
-  # schedule:                        # 取消注释以启用自动执行
-  #   - cron: '0 1 * * *'            # UTC 1:00 = 北京时间 9:00
-  workflow_dispatch:                  # 支持手动触发
+  # schedule:
+  #   - cron: '0 1 * * *'  # UTC 1:00 = 北京时间 9:00
+  workflow_dispatch:     # 支持手动触发
 
 jobs:
   notify:
@@ -22,17 +22,23 @@ jobs:
           
       - name: Send Domain Expiry Notification
         run: |
-          echo "🚀 调用 API: ${{ secrets.PAGES_URL }}/api/cron/notify"
+          # 🔒 使用 API Token 认证保护接口
+          echo "🚀 开始执行域名到期通知任务..."
           
-          response=$(curl -s -w "\n%{http_code}" -X GET "${{ secrets.PAGES_URL }}/api/cron/notify")
+          # 构建带 Token 的 API URL
+          API_URL="${{ secrets.PAGES_URL }}/api/cron/notify"
+          if [ -n "${{ secrets.CRON_API_KEY }}" ]; then
+            API_URL="${API_URL}?token=${{ secrets.CRON_API_KEY }}"
+          fi
+          
+          response=$(curl -s -w "\n%{http_code}" -X GET "$API_URL")
           http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | sed '$d')
           
           echo "📊 HTTP Status: $http_code"
-          echo "📄 Response Body: $body"
           
           if [ "$http_code" -ne 200 ]; then
-            echo "❌ 通知发送失败"
+            echo "❌ 通知发送失败 (HTTP $http_code)"
+            echo "💡 提示：请检查 Cloudflare Pages 部署状态和 CRON_API_KEY 配置"
             exit 1
           else
             echo "✅ 通知发送成功"

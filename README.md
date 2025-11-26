@@ -28,33 +28,37 @@
 
 - Pages 项目 > `Settings` > `Environment variables`
 - 添加以下变量：
-    - `ADMIN_USER`: 管理员用户名
-    - `ADMIN_PASSWORD`: 管理员密码
-    - `JWT_SECRET`: JWT 签名密钥 (建议设置)
+
+| 变量名 | 说明 | 是否必需 | 示例值 |
+|--------|------|----------|--------|
+| `ADMIN_USER` | 管理员用户名 | ✅ 必需 | `admin` |
+| `ADMIN_PASSWORD` | 管理员密码 | ✅ 必需 | `your_password` |
+| `JWT_SECRET` | JWT 签名密钥 | ✅ 必需 | `random_string` |
+| `CRON_API_KEY` | 定时任务 API 密钥 | ⭐ 推荐 | `random_key` (用于保护 API) |
+
+> ⚠️ **注意**：变量名必须完全一致（全大写、下划线），**不能包含空格**。
 
 > 配置完成后，在 `Deployments` 页面重试部署 (Retry deployment) 以使配置生效。
 
-#### 4. 配置自动通知（GitHub Actions）
+#### 4. 配置定时任务
 
-本项目使用 **GitHub Actions** 实现域名到期自动提醒和状态检查：
+本项目支持两种定时任务触发方式，任选其一即可：
+ 
+ **方案 1：GitHub Actions**
+ 
+ 1. 在 GitHub 仓库设置中添加 Secrets：
+    - `PAGES_URL`: Cloudflare Pages 地址
+    - `CRON_API_KEY`: API 认证密钥
+ 2. 编辑 `.github/workflows/` 下的文件，取消注释 `schedule` 部分以启用自动执行。
+ 
+ **方案 2：Cloudflare Worker Cron**
+ 
+ 1. 在 Cloudflare Dashboard 创建一个 Worker。
+ 2. 将根目录下 `cron-worker.js` 的代码复制到 Worker 中。
+ 3. 配置环境变量 (`PAGES_URL`, `CRON_API_KEY`) 和 Cron 触发器。
+ 
 
-**配置步骤**：
 
-1. 在 GitHub 仓库设置中添加 Secret：
-   - 进入仓库 **Settings** > **Secrets and variables** > **Actions**
-   - 点击 **New repository secret**
-   - 添加 `PAGES_URL`，值为您的 Cloudflare Pages 地址（如 `https://your-project.pages.dev`）
-
-2. **自动执行**（无需其他操作）：
-   - ✅ **域名到期通知**：每天北京时间上午 9:00 自动执行
-   - ✅ **域名状态检查**：每天北京时间上午 9:30 自动执行
-
-3. **手动触发**（可选）：
-   - 进入 GitHub 仓库 **Actions** 标签页
-   - 选择对应的 Workflow
-   - 点击 **Run workflow** 立即执行
-
-> ⚠️ **注意**：自动执行默认已禁用，只能手动触发。如需启用自动执行，请参考 [工作流配置指南](.github/WORKFLOWS.md)
 
 #### 5. 配置通知设置
 
