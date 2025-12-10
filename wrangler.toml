@@ -1,0 +1,8 @@
+name = "domain-admin"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-11-24"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "domain-admin-db"
+database_id = "33353732-aa7b-4fd2-b9e2-3a76865c7bb2"
