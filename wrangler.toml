@@ -8,17 +8,17 @@ database_name = "domain-admin-db"
 database_id = "cf5e1be1-4566-4271-86f3-3ecfb0916d67"
 
 # Environment variables for authentication
-# ADMIN_USER = "admin"
-# ADMIN_PASSWORD = "your-password"
-# JWT_SECRET = "your-secret-key"
+ADMIN_USER = "admin"
+ADMIN_PASSWORD = "your-password"
+JWT_SECRET = "your-secret-key"
 
 # Cron API 认证密钥 (可选,但强烈推荐)
 # 用于保护 /api/cron/* 端点,防止未授权访问
 # 如果配置此项,GitHub Actions 或 Worker Cron 也必须配置相同的值
-# CRON_API_KEY = "your-random-secret-key"
+CRON_API_KEY = "your-random-secret-key"
 
 # Environment variables for notifications
-# TELEGRAM_BOT_TOKEN = "your-telegram-bot-token"
-# TELEGRAM_CHAT_ID = "your-telegram-chat-id"
-# FEISHU_WEBHOOK_URL = "your-feishu-webhook-url"
-# NOTIFY_DAYS_BEFORE = "30"
+TELEGRAM_BOT_TOKEN = "your-telegram-bot-token"
+TELEGRAM_CHAT_ID = "your-telegram-chat-id"
+FEISHU_WEBHOOK_URL = "your-feishu-webhook-url"
+NOTIFY_DAYS_BEFORE = "30"
